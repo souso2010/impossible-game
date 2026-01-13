@@ -8,11 +8,10 @@
     :root {
       --bg: #050509;
       --accent: #ff4b8b;
-      --accent2: #ffb347;
+      --accent2: #4bdfff;
+      --danger: #ff4b4b;
       --grid-bg: #151521;
       --cell-bg: #1f1f30;
-      --x-color: #ff4b8b;
-      --o-color: #4bdfff;
       --text-main: #f5f5f7;
       --muted: #a0a0b8;
     }
@@ -31,10 +30,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
     }
 
-    /* Layout */
     .app {
       width: 100%;
       max-width: 480px;
@@ -44,11 +41,11 @@
     .card {
       background: linear-gradient(145deg, rgba(15,15,35,0.95), rgba(8,8,20,0.98));
       border-radius: 24px;
-      padding: 20px 18px 18px;
+      padding: 20px 16px 16px;
       box-shadow:
         0 0 40px rgba(0,0,0,0.9),
         0 0 60px rgba(255,75,139,0.12);
-      border: 1px solid rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
       position: relative;
       overflow: hidden;
     }
@@ -69,21 +66,18 @@
       display: none !important;
     }
 
-    /* Splash / intro screen */
+    /* SPLASH */
     .splash {
       text-align: center;
-      position: relative;
-      padding-top: 8px;
-      padding-bottom: 10px;
-      animation: fadeIn 0.6s ease-out;
+      animation: fadeIn 0.5s ease-out;
     }
 
     .logo-text {
-      font-size: 2.4rem;
+      font-size: 2.2rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       font-weight: 800;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -97,17 +91,640 @@
     }
 
     .logo-text span.icon {
-      font-size: 1.9rem;
-      filter: drop-shadow(0 0 6px rgba(255,75,139,0.6));
+      font-size: 1.8rem;
     }
 
     .tagline {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .owner {
+      font-size: 0.76rem;
       color: var(--muted);
       margin-bottom: 18px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
+
+    .owner span {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 26px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: radial-gradient(circle at top left, #ffb347, #ff4b8b);
+      color: #050509;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.8rem;
+      box-shadow:
+        0 0 16px rgba(255,75,139,0.7),
+        0 0 36px rgba(255,75,139,0.4);
+      margin-bottom: 14px;
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    }
+
+    .primary-btn span.icon {
+      margin-left: 8px;
+      font-size: 1.1rem;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px) scale(1.01);
+    }
+
+    .primary-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 0 10px rgba(255,75,139,0.6);
+    }
+
+    .tiny-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .tiny-pill {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(5,5,15,0.8);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tiny-pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #5cff9d;
+      box-shadow: 0 0 8px rgba(92,255,157,0.7);
+    }
+
+    /* GAME SCREEN */
+    .game {
+      animation: slideUp 0.45s ease-out;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .title-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .game-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .legend {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .legend span.me {
+      color: var(--accent2);
+    }
+
+    .status-box {
+      margin-bottom: 12px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.78rem;
+    }
+
+    .status-main {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .status-sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .board-wrap {
+      background: var(--grid-bg);
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: inset 0 0 22px rgba(0,0,0,0.7);
+      margin-bottom: 10px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .cell {
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      background: var(--cell-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      cursor: pointer;
+      user-select: none;
+      box-shadow:
+        0 0 0 rgba(0,0,0,0),
+        inset 0 0 13px rgba(0,0,0,0.8);
+      transition:
+        background 0.1s ease-out,
+        transform 0.08s ease-out,
+        box-shadow 0.1s ease-out;
+    }
+
+    .cell:hover {
+      background: #26263d;
+      transform: translateY(-1px);
+    }
+
+    .cell:active {
+      background: #202034;
+      transform: translateY(0);
+    }
+
+    .cell.user {
+      color: var(--accent2);
+      text-shadow: 0 0 10px rgba(75,223,255,0.9);
+    }
+
+    .cell.ai {
+      color: var(--danger);
+      text-shadow: 0 0 10px rgba(255,75,75,0.9);
+    }
+
+    .cell.win {
+      box-shadow:
+        0 0 18px rgba(255,179,71,0.9),
+        inset 0 0 18px rgba(0,0,0,0.9);
+      background: #332020;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.02);
+      color: var(--text-main);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      border-color: var(--accent);
+      background: linear-gradient(120deg, rgba(255,75,139,0.4), rgba(255,179,71,0.2));
+      box-shadow: 0 0 14px rgba(255,75,139,0.6);
+    }
+
+    .footer {
+      margin-top: 10px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .footer span.brand {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.68rem;
+    }
+
+    /* POPUP OVERLAY */
+    #popup {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+      color: #ffffff;
+      font-size: 1.2rem;
+      z-index: 999;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    #popup-text {
+      margin-bottom: 20px;
+      line-height: 1.4;
+      text-shadow: 0 0 16px rgba(255,75,139,0.8);
+    }
+
+    #retryBtn {
+      padding: 10px 26px;
+      border-radius: 999px;
+      border: none;
+      background: #ff4b8b;
+      color: #fff;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      box-shadow:
+        0 0 18px rgba(255,75,139,0.8),
+        0 0 30px rgba(255,75,139,0.5);
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    }
+
+    #retryBtn:active {
+      transform: scale(0.96);
+      box-shadow:
+        0 0 12px rgba(255,75,139,0.7),
+        0 0 18px rgba(255,75,139,0.4);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 420px) {
+      .card {
+        padding: 16px 12px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="card">
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash" class="splash">
+      <div class="logo-text">
+        <span class="main">IMPOSSIBLE</span>
+        <span class="icon">😈</span>
+      </div>
+      <div class="tagline">You don't beat this. You survive it.</div>
+      <div class="owner">Owned by <span>[Tamochi]</span></div>
+
+      <button id="startButton" class="primary-btn">
+        <span>Begin the suffering</span>
+        <span class="icon">▶</span>
+      </button>
+
+      <div class="tiny-row">
+        <div class="tiny-pill">
+          <span class="dot"></span>
+          <span>AI enabled</span>
+        </div>
+        <span>Tip: a draw is a victory… sorta.</span>
+      </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="gameScreen" class="game hidden">
+      <div class="top-bar">
+        <div class="title-col">
+          <div class="game-title">Impossible</div>
+          <div class="subtitle">Tic tac toe – unbeatable AI</div>
+        </div>
+        <div class="legend">
+          You: <span class="me">🔵</span>
+        </div>
+      </div>
+
+      <div class="status-box">
+        <div id="statusMain" class="status-main">Your turn – you are 🔵.</div>
+        <div id="statusSub" class="status-sub">Try to win. The AI will not let you.</div>
+      </div>
+
+      <div class="board-wrap">
+        <div id="board" class="board"></div>
+      </div>
+
+      <div class="btn-row">
+        <button id="resetBtn" class="btn primary">New round</button>
+        <button id="backBtn" class="btn">Back</button>
+      </div>
+
+      <div class="footer">
+        <span class="brand">TAMOCHI</span>
+        <span>Unbeatable by design</span>
+      </div>
+    </div>
+
+    <!-- POPUP (AI WIN) -->
+    <div id="popup" class="hidden">
+      <div id="popup-text">
+        I beg you… make it 👿
+      </div>
+      <button id="retryBtn">Retry</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ====== STATE ======
+  const HUMAN = "human"; // 🔵
+  const AI = "ai";       // ❌
+
+  let board = Array(9).fill(null);
+  let gameOver = false;
+  let currentPlayer = HUMAN;
+
+  // ====== DOM ELEMENTS ======
+  const splashEl = document.getElementById("splash");
+  const gameScreenEl = document.getElementById("gameScreen");
+  const startButton = document.getElementById("startButton");
+  const boardEl = document.getElementById("board");
+  const statusMainEl = document.getElementById("statusMain");
+  const statusSubEl = document.getElementById("statusSub");
+  const resetBtn = document.getElementById("resetBtn");
+  const backBtn = document.getElementById("backBtn");
+  const popupEl = document.getElementById("popup");
+  const retryBtn = document.getElementById("retryBtn");
+
+  // ====== INIT ======
+  function init() {
+    createBoard();
+    attachEvents();
+    renderBoard();
+  }
+
+  function attachEvents() {
+    startButton.addEventListener("click", () => {
+      splashEl.classList.add("hidden");
+      gameScreenEl.classList.remove("hidden");
+      resetGame();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      hidePopup();
+      resetGame();
+    });
+
+    backBtn.addEventListener("click", () => {
+      gameScreenEl.classList.add("hidden");
+      splashEl.classList.remove("hidden");
+      hidePopup();
+      resetGame();
+    });
+
+    retryBtn.addEventListener("click", () => {
+      hidePopup();
+      resetGame();
+    });
+  }
+
+  function createBoard() {
+    boardEl.innerHTML = "";
+    for (let i = 0; i < 9; i++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.dataset.index = i;
+      cell.addEventListener("click", () => handleCellClick(i));
+      boardEl.appendChild(cell);
+    }
+  }
+
+  function resetGame() {
+    board = Array(9).fill(null);
+    gameOver = false;
+    currentPlayer = HUMAN;
+    statusMainEl.textContent = "Your turn – you are 🔵.";
+    statusSubEl.textContent = "Try to win. The AI will not let you.";
+    clearWinHighlight();
+    renderBoard();
+  }
+
+  function handleCellClick(index) {
+    if (gameOver) return;
+    if (board[index] !== null) return;
+    if (currentPlayer !== HUMAN) return;
+
+    // Human move
+    board[index] = HUMAN;
+    renderBoard();
+
+    if (checkWinner(board, HUMAN)) {
+      gameOver = true;
+      highlightWin(board, HUMAN);
+      statusMainEl.textContent = "You actually won?!";
+      statusSubEl.textContent = "Okay… that was not supposed to happen.";
+      return;
+    }
+
+    if (isDraw(board)) {
+      gameOver = true;
+      statusMainEl.textContent = "Draw.";
+      statusSubEl.textContent = "Against this AI, that’s basically a win.";
+      return;
+    }
+
+    currentPlayer = AI;
+    statusMainEl.textContent = "AI is thinking…";
+    statusSubEl.textContent = "Red ❌ is calculating your doom.";
+
+    setTimeout(aiMove, 200);
+  }
+
+  function aiMove() {
+    if (gameOver) return;
+
+    const best = minimax([...board], AI);
+    board[best.index] = AI;
+    renderBoard();
+
+    if (checkWinner(board, AI)) {
+      gameOver = true;
+      highlightWin(board, AI);
+      showPopup(); // custom popup on AI win
+      return;
+    }
+
+    if (isDraw(board)) {
+      gameOver = true;
+      statusMainEl.textContent = "Draw.";
+      statusSubEl.textContent = "You survived. Barely.";
+      return;
+    }
+
+    currentPlayer = HUMAN;
+    statusMainEl.textContent = "Your turn – you are 🔵.";
+    statusSubEl.textContent = "Find a way to at least draw.";
+  }
+
+  function renderBoard() {
+    const cells = boardEl.querySelectorAll(".cell");
+    cells.forEach((cell, i) => {
+      const val = board[i];
+      cell.classList.remove("user", "ai");
+      if (val === HUMAN) {
+        cell.textContent = "🔵";
+        cell.classList.add("user");
+      } else if (val === AI) {
+        cell.textContent = "❌";
+        cell.classList.add("ai");
+      } else {
+        cell.textContent = "";
+      }
+    });
+  }
+
+  function clearWinHighlight() {
+    const cells = boardEl.querySelectorAll(".cell");
+    cells.forEach(cell => cell.classList.remove("win"));
+  }
+
+  function highlightWin(b, player) {
+    const wins = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+    const cells = boardEl.querySelectorAll(".cell");
+    for (const line of wins) {
+      if (line.every(i => b[i] === player)) {
+        line.forEach(i => cells[i].classList.add("win"));
+      }
+    }
+  }
+
+  // ====== POPUP ======
+  function showPopup() {
+    statusMainEl.textContent = "You lost. As expected.";
+    statusSubEl.textContent = "The AI never makes a mistake.";
+    popupEl.classList.remove("hidden");
+  }
+
+  function hidePopup() {
+    popupEl.classList.add("hidden");
+  }
+
+  // ====== MINIMAX (UNBEATABLE AI) ======
+  function minimax(newBoard, player) {
+    const availSpots = newBoard
+      .map((v, i) => (v === null ? i : null))
+      .filter((v) => v !== null);
+
+    if (checkWinner(newBoard, HUMAN)) {
+      return { score: -10 };
+    } else if (checkWinner(newBoard, AI)) {
+      return { score: 10 };
+    } else if (availSpots.length === 0) {
+      return { score: 0 };
+    }
+
+    const moves = [];
+
+    for (let i = 0; i < availSpots.length; i++) {
+      const idx = availSpots[i];
+      const move = {};
+      move.index = idx;
+
+      newBoard[idx] = player;
+
+      if (player === AI) {
+        const result = minimax(newBoard, HUMAN);
+        move.score = result.score;
+      } else {
+        const result = minimax(newBoard, AI);
+        move.score = result.score;
+      }
+
+      newBoard[idx] = null;
+      moves.push(move);
+    }
+
+    let bestMove;
+    if (player === AI) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+
+    return moves[bestMove];
+  }
+
+  function checkWinner(b, player) {
+    const wins = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+    return wins.some(line => line.every(i => b[i] === player));
+  }
+
+  function isDraw(b) {
+    return b.every((c) => c !== null);
+  }
+
+  // Start the game
+  init();
+</script>
+</body>
+</html>    }
 
     .owner {
       font-size: 0.75rem;
