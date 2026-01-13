@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Impossible 😈 – Tamochi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050509;
+      --accent: #ff4b8b;
+      --accent2: #ffb347;
+      --grid-bg: #151521;
+      --cell-bg: #1f1f30;
+      --x-color: #ff4b8b;
+      --o-color: #4bdfff;
+      --text-main: #f5f5f7;
+      --muted: #a0a0b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1b1333 0, #050509 55%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Layout */
+    .app {
+      width: 100%;
+      max-width: 480px;
+      padding: 16px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(15,15,35,0.95), rgba(8,8,20,0.98));
+      border-radius: 24px;
+      padding: 20px 18px 18px;
+      box-shadow:
+        0 0 40px rgba(0,0,0,0.9),
+        0 0 60px rgba(255,75,139,0.12);
+      border: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(255,75,139,0.3), transparent 70%);
+      top: -120px;
+      right: -80px;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Splash / intro screen */
+    .splash {
+      text-align: center;
+      position: relative;
+      padding-top: 8px;
+      padding-bottom: 10px;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .logo-text {
+      font-size: 2.4rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-text span.main {
+      background: linear-gradient(120deg, #ff4b8b, #ffb347);
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 12px rgba(255,75,139,0.45);
+    }
+
+    .logo-text span.icon {
+      font-size: 1.9rem;
+      filter: drop-shadow(0 0 6px rgba(255,75,139,0.6));
+    }
+
+    .tagline {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .owner {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    .owner span {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    /* Glowing start button */
+    .primary-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 30px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: radial-gradient(circle at top left, #ffb347, #ff4b8b);
+      color: #050509;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.8rem;
+      box-shadow:
+        0 0 16px rgba(255,75,139,0.7),
+        0 0 36px rgba(255,75,139,0.4);
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, filter 0.15s;
+    }
+
+    .primary-btn span.icon {
+      margin-left: 8px;
+      font-size: 1.1rem;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px) scale(1.02);
+      filter: brightness(1.05);
+      box-shadow:
+        0 0 26px rgba(255,75,139,0.9),
+        0 0 52px rgba(255,75,139,0.5);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0) scale(0.99);
+      box-shadow:
+        0 0 10px rgba(255,75,139,0.6),
+        0 0 20px rgba(255,75,139,0.3);
+    }
+
+    /* Loading bar */
+    .loading-wrap {
+      margin-top: 16px;
+      margin-bottom: 4px;
+    }
+
+    .loading-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 4px;
+    }
+
+    .loading-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loading-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #ff4b8b, #ffb347);
+      border-radius: inherit;
+      box-shadow: 0 0 14px rgba(255,75,139,0.7);
+      transition: width 0.3s ease-out;
+    }
+
+    /* Tiny info strip */
+    .tiny-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .tiny-pill {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(5,5,15,0.8);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tiny-pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #5cff9d;
+      box-shadow: 0 0 8px rgba(92,255,157,0.7);
+    }
+
+    /* Game screen */
+    .game-screen {
+      animation: slideUp 0.45s ease-out;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .title-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .game-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .skin-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.09);
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    .skin-pill span.cheese {
+      font-size: 1rem;
+    }
+
+    /* Rage meter */
+    .rage-wrap {
+      margin-bottom: 10px;
+    }
+
+    .rage-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.73rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .rage-bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .rage-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ffcf47, #ff4b4b);
+      box-shadow: 0 0 14px rgba(255,75,75,0.7);
+      transition: width 0.3s ease-out;
+    }
+
+    /* Board + info row */
+    .board-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .board-wrap {
+      flex: 1.2;
+      background: var(--grid-bg);
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: inset 0 0 22px rgba(0,0,0,0.7);
+      position: relative;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .cell {
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      background: var(--cell-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      cursor: pointer;
+      transition: transform 0.08s ease-out, background 0.15s ease-out, box-shadow 0.15s;
+      box-shadow:
+        0 0 0 rgba(0,0,0,0),
+        inset 0 0 14px rgba(0,0,0,0.8);
+      user-select: none;
+    }
+
+    .cell:hover {
+      transform: translateY(-1px);
+      background: #282842;
+    }
+
+    .cell:active {
+      transform: translateY(0);
+      background: #202034;
+    }
+
+    .cell.x {
+      color: var(--x-color);
+      text-shadow: 0 0 10px rgba(255,75,139,0.9);
+    }
+
+    .cell.o {
+      color: var(--o-color);
+      text-shadow: 0 0 10px rgba(75,223,255,0.9);
+    }
+
+    .cell.cheese-skin {
+      background: #3a2a18;
+      box-shadow:
+        inset 0 0 16px rgba(0,0,0,0.8),
+        0 0 14px rgba(255,179,71,0.4);
+    }
+
+    .cell.cheese-skin.x {
+      color: #ffeb99;
+      text-shadow: 0 0 14px rgba(255,235,153,0.9);
+    }
+
+    .cell.cheese-skin.o {
+      color: #ffe066;
+      text-shadow: 0 0 14px rgba(255,224,102,0.9);
+    }
+
+    .board-overlay {
+      position: absolute;
+      inset: 10px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top, rgba(0,0,0,0.4), transparent 65%);
+      pointer-events: none;
+    }
+
+    /* Right column */
+    .side-info {
+      flex: 0.9;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.78rem;
+    }
+
+    .mode-toggle {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .chip {
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      cursor: pointer;
+      background: rgba(255,255,255,0.02);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.66rem;
+    }
+
+    .chip.active {
+      border-color: rgba(255,75,139,0.9);
+      background: linear-gradient(120deg, rgba(255,75,139,0.18), rgba(255,179,71,0.09));
+      color: var(--text-main);
+      box-shadow: 0 0 18px rgba(255,75,139,0.5);
+    }
+
+    .status-box {
+      padding: 8px 9px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      min-height: 54px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .status-main {
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .status-sub {
+      color: var(--muted);
+      font-size: 0.7rem;
+    }
+
+    .leaderboard {
+      padding: 7px 9px 8px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .leaderboard-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .leaderboard-list {
+      list-style: none;
+      margin-top: 4px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      padding: 2px 0;
+    }
+
+    .leaderboard-item span.me {
+      color: var(--accent2);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.02);
+      color: var(--text-main);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      border-color: rgba(255,75,139,0.9);
+      background: linear-gradient(120deg, rgba(255,75,139,0.3), rgba(255,179,71,0.18));
+      box-shadow: 0 0 18px rgba(255,75,139,0.6);
+    }
+
+    .footer {
+      margin-top: 10px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer span.brand {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.68rem;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 420px) {
+      .card {
+        padding: 16px 14px 14px;
+        border-radius: 20px;
+      }
+      .logo-text {
+        font-size: 2rem;
+      }
+      .board-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="card">
+
+      <!-- SPLASH SCREEN -->
+      <div id="splash" class="splash">
+        <div class="logo-text">
+          <span class="main">IMPOSSIBLE</span>
+          <span class="icon">😈</span>
+        </div>
+        <div class="tagline">You don't beat this. You survive it.</div>
+        <div class="owner">Owned by <span>[Tamochi]</span></div>
+
+        <button id="startButton" class="primary-btn">
+          <span>Begin the suffering</span>
+          <span class="icon">▶</span>
+        </button>
+
+        <div class="loading-wrap">
+          <div class="loading-label">Preparing rage</div>
+          <div class="loading-bar">
+            <div id="loadingFill" class="loading-bar-fill"></div>
+          </div>
+        </div>
+
+        <div class="tiny-row">
+          <div class="tiny-pill">
+            <span class="dot"></span>
+            <span>AI enabled</span>
+          </div>
+          <span>Tip: a draw is a victory… sorta.</span>
+        </div>
+      </div>
+
+      <!-- GAME SCREEN -->
+      <div id="gameScreen" class="game-screen hidden">
+        <div class="top-bar">
+          <div class="title-col">
+            <div class="game-title">Impossible</div>
+            <div class="subtitle">Tic tac toe – by [Tamochi]</div>
+          </div>
+          <button id="skinToggle" class="skin-pill">
+            <span class="cheese">🧀</span>
+            <span>Cheese skin</span>
+          </button>
+        </div>
+
+        <div class="rage-wrap">
+          <div class="rage-label-row">
+            <span>Rage Meter</span>
+            <span id="rageLabel">Chill</span>
+          </div>
+          <div class="rage-bar">
+            <div id="rageFill" class="rage-fill"></div>
+          </div>
+        </div>
+
+        <div class="board-row">
+          <div class="board-wrap">
+            <div id="board" class="grid"></div>
+            <div class="board-overlay"></div>
+          </div>
+          <div class="side-info">
+            <div class="mode-toggle">
+              <button id="modeAi" class="chip active">VS AI</button>
+              <button id="modeLocal" class="chip">2P LOCAL</button>
+            </div>
+
+            <div class="status-box">
+              <div id="statusMain" class="status-main">Your turn – you are X</div>
+              <div id="statusSub" class="status-sub">AI will never let you win.</div>
+            </div>
+
+            <div class="leaderboard">
+              <div class="leaderboard-header">
+                <span>Leaderboard</span>
+                <span>Local</span>
+              </div>
+              <ul id="leaderboardList" class="leaderboard-list"></ul>
+            </div>
+
+            <div class="btn-row">
+              <button id="btnReset" class="btn primary">New Round</button>
+              <button id="btnSplash" class="btn">Back</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <span class="brand">TAMOCHI</span>
+          <span>Multiplayer ready • Mobile friendly</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio -->
+  <audio id="bgMusic" loop>
+    <source src="" type="audio/mpeg" />
+  </audio>
+  <audio id="sfxMove">
+    <source src="" type="audio/mpeg" />
+  </audio>
+  <audio id="sfxWin">
+    <source src="" type="audio/mpeg" />
+  </audio>
+  <audio id="sfxLose">
+    <source src="" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    // ====== STATE ======
+    const EMPTY = "";
+    const HUMAN = "X";
+    const AI = "O";
+
+    let board = Array(9).fill(EMPTY);
+    let currentPlayer = HUMAN;
+    let aiEnabled = true; // vs AI or local 2P
+    let gameOver = false;
+    let cheeseSkin = false;
+    let rage = 0; // 0–100
+    let stats = {
+      wins: 0,
+      losses: 0,
+      draws: 0
+    };
+
+    // DOM
+    const splashEl     = document.getElementById("splash");
+    const gameScreenEl = document.getElementById("gameScreen");
+    const startButton  = document.getElementById("startButton");
+    const loadingFill  = document.getElementById("loadingFill");
+    const boardEl      = document.getElementById("board");
+    const statusMainEl = document.getElementById("statusMain");
+    const statusSubEl  = document.getElementById("statusSub");
+    const rageFillEl   = document.getElementById("rageFill");
+    const rageLabelEl  = document.getElementById("rageLabel");
+    const leaderboardListEl = document.getElementById("leaderboardList");
+    const modeAiBtn    = document.getElementById("modeAi");
+    const modeLocalBtn = document.getElementById("modeLocal");
+    const skinToggleBtn = document.getElementById("skinToggle");
+    const btnReset     = document.getElementById("btnReset");
+    const btnSplash    = document.getElementById("btnSplash");
+
+    const bgMusicEl = document.getElementById("bgMusic");
+    const sfxMoveEl = document.getElementById("sfxMove");
+    const sfxWinEl  = document.getElementById("sfxWin");
+    const sfxLoseEl = document.getElementById("sfxLose");
+
+    // ====== INIT ======
+    function init() {
+      createBoardCells();
+      loadStats();
+      renderLeaderboard();
+      renderBoard();
+    }
+
+    function createBoardCells() {
+      boardEl.innerHTML = "";
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.dataset.index = i;
+        cell.addEventListener("click", () => handleCellClick(i));
+        boardEl.appendChild(cell);
+      }
+    }
+
+    // ====== SPLASH + TRANSITION ======
+    let loadingInterval = null;
+
+    startButton.addEventListener("click", () => {
+      if (loadingInterval) return;
+      let progress = 0;
+      loadingInterval = setInterval(() => {
+        progress += Math.random() * 28;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(loadingInterval);
+          loadingInterval = null;
+          showGameScreen();
+          startMusic();
+        }
+        loadingFill.style.width = progress + "%";
+      }, 150);
+    });
+
+    function showGameScreen() {
+      splashEl.classList.add("hidden");
+      gameScreenEl.classList.remove("hidden");
+    }
+
+    btnSplash.addEventListener("click", () => {
+      gameScreenEl.classList.add("hidden");
+      splashEl.classList.remove("hidden");
+      resetBoard(false);
+      stopMusic();
+      loadingFill.style.width = "0%";
+    });
+
+    // ====== MUSIC & SFX (you can plug real files) ======
+    function startMusic() {
+      // If you add a real src to <audio>, this will play
+      if (bgMusicEl && bgMusicEl.play) {
+        bgMusicEl.volume = 0.35;
+        bgMusicEl.play().catch(() => {});
+      }
+    }
+
+    function stopMusic() {
+      if (bgMusicEl && bgMusicEl.pause) {
+        bgMusicEl.pause();
+        bgMusicEl.currentTime = 0;
+      }
+    }
+
+    function playMoveSfx() {
+      if (sfxMoveEl && sfxMoveEl.play) {
+        sfxMoveEl.currentTime = 0;
+        sfxMoveEl.play().catch(() => {});
+      }
+    }
+
+    function playWinSfx() {
+      if (sfxWinEl && sfxWinEl.play) {
+        sfxWinEl.currentTime = 0;
+        sfxWinEl.play().catch(() => {});
+      }
+    }
+
+    function playLoseSfx() {
+      if (sfxLoseEl && sfxLoseEl.play) {
+        sfxLoseEl.currentTime = 0;
+        sfxLoseEl.play().catch(() => {});
+      }
+    }
+
+    // ====== GAME LOGIC ======
+    function resetBoard(soft = true) {
+      board = Array(9).fill(EMPTY);
+      currentPlayer = HUMAN;
+      gameOver = false;
+      renderBoard();
+      updateStatus();
+      if (!soft) {
+        rage = 0;
+        updateRage();
+      }
+    }
+
+    btnReset.addEventListener("click", () => {
+      resetBoard(true);
+    });
+
+    function handleCellClick(index) {
+      if (gameOver) return;
+      if (board[index] !== EMPTY) return;
+
+      board[index] = currentPlayer;
+      playMoveSfx();
+      renderBoard();
+
+      if (checkWinner(board, currentPlayer)) {
+        handleWin(currentPlayer);
+        return;
+      }
+
+      if (isDraw(board))
